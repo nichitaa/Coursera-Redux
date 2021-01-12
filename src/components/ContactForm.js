@@ -1,6 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Button, Row, Col, Label } from "reactstrap";
 import { Control, LocalForm, Errors } from "react-redux-form";
+// redux actions
+import { formSubmit } from "../redux/actionCreators";
 
 // validator functions
 const required = (val) => val && val.length;
@@ -10,10 +13,14 @@ const isNumber = (val) => !isNaN(Number(val));
 const validEmail = (val) =>
 	/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
-export default function ContactForm() {
+const ContactForm = ({ formSubmit }) => {
 	const handleSubmit = (values) => {
 		console.log("Current state of the form: ", values);
-		alert("Current form state is: " + JSON.stringify(values));
+		const firstname = values.firstname;
+		const lastname = values.lastname;
+		const telnum = values.telnum;
+		const email = values.email;
+		formSubmit(firstname, lastname, telnum, email);
 	};
 
 	return (
@@ -119,7 +126,8 @@ export default function ContactForm() {
 						placeholder="Email"
 						className="form-control"
 						validators={{
-							required, validEmail
+							required,
+							validEmail,
 						}}
 					/>
 					<Errors
@@ -128,7 +136,7 @@ export default function ContactForm() {
 						show="touched"
 						messages={{
 							required: "Required First Name",
-							validEmail: "Must be a valid Email"
+							validEmail: "Must be a valid Email",
 						}}
 					/>
 				</Col>
@@ -180,4 +188,12 @@ export default function ContactForm() {
 			</Row>
 		</LocalForm>
 	);
-}
+};
+
+const mapDispatchToProps = (dispatch) => ({
+	// componentFunctionName: (props) => dispatch((actionCreator(props)))
+	formSubmit: (firstname, lastname, telnum, email) =>
+		dispatch(formSubmit(firstname, lastname, telnum, email)),
+});
+
+export default connect(null, mapDispatchToProps)(ContactForm);

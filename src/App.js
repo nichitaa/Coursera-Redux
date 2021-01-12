@@ -1,8 +1,8 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { StoreConfigs } from "./redux/StoreConfigs";
-import ContactForm from "./ContactForm";
-import TabNav from "./TabNav";
+import ContactForm from "./components/ContactForm";
+import TabNav from "./components/TabNav";
 
 function App() {
 	const store = StoreConfigs();
