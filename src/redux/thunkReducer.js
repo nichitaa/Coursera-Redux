@@ -1,7 +1,7 @@
 import * as TYPE from './actionsTypes';
 
 export const initialState = {
-    data: ''
+    data: []
 }
 
 export const ThunkReducer = (state = initialState, action) => {

@@ -205,7 +205,7 @@ const ContactForm = ({
 				</Col>
 			</Row>
 
-			{loading ? (
+			{/* {loading ? (
 				<Loading />
 			) : (
 				<Row className="form-group">
@@ -213,7 +213,7 @@ const ContactForm = ({
 						<Label>{fetchedData}</Label>
 					</Col>
 				</Row>
-			)}
+			)} */}
 		</Form>
 	);
 };
