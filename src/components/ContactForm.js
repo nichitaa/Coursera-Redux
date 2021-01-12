@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Button, Row, Col, Label } from "reactstrap";
-import { Control, LocalForm, Errors } from "react-redux-form";
+import { Control, LocalForm, Form, Errors, actions } from "react-redux-form";
 import Loading from "./Loading";
 // redux actions
 import { formSubmit, fetchData } from "../redux/actionCreators";
@@ -14,7 +14,13 @@ const isNumber = (val) => !isNaN(Number(val));
 const validEmail = (val) =>
 	/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
-const ContactForm = ({ formSubmit, fetchData, loading, fetchedData }) => {
+const ContactForm = ({
+	formSubmit,
+	fetchData,
+	loading,
+	fetchedData,
+	resetFeedbackForm,
+}) => {
 	const handleSubmit = (values) => {
 		console.log("Current state of the form: ", values);
 		const firstname = values.firstname;
@@ -22,13 +28,14 @@ const ContactForm = ({ formSubmit, fetchData, loading, fetchedData }) => {
 		const telnum = values.telnum;
 		const email = values.email;
 		formSubmit(firstname, lastname, telnum, email);
+		resetFeedbackForm();
 	};
 
 	console.log(loading);
 	console.log(fetchedData);
 
 	return (
-		<LocalForm onSubmit={(values) => handleSubmit(values)}>
+		<Form model="feedback" onSubmit={(values) => handleSubmit(values)}>
 			<Row className="form-group">
 				<Label htmlFor="firstname" md={2}>
 					First Name
@@ -207,7 +214,7 @@ const ContactForm = ({ formSubmit, fetchData, loading, fetchedData }) => {
 					</Col>
 				</Row>
 			)}
-		</LocalForm>
+		</Form>
 	);
 };
 
@@ -222,6 +229,9 @@ const mapDispatchToProps = (dispatch) => ({
 		dispatch(formSubmit(firstname, lastname, telnum, email)),
 	fetchData: () => {
 		dispatch(fetchData());
+	},
+	resetFeedbackForm: () => {
+		dispatch(actions.reset("feedback"));
 	},
 });
 
