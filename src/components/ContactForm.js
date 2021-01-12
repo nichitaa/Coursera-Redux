@@ -2,8 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { Button, Row, Col, Label } from "reactstrap";
 import { Control, LocalForm, Errors } from "react-redux-form";
+import Loading from "./Loading";
 // redux actions
-import { formSubmit } from "../redux/actionCreators";
+import { formSubmit, fetchData } from "../redux/actionCreators";
 
 // validator functions
 const required = (val) => val && val.length;
@@ -13,7 +14,7 @@ const isNumber = (val) => !isNaN(Number(val));
 const validEmail = (val) =>
 	/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
-const ContactForm = ({ formSubmit }) => {
+const ContactForm = ({ formSubmit, fetchData, loading, fetchedData }) => {
 	const handleSubmit = (values) => {
 		console.log("Current state of the form: ", values);
 		const firstname = values.firstname;
@@ -22,6 +23,9 @@ const ContactForm = ({ formSubmit }) => {
 		const email = values.email;
 		formSubmit(firstname, lastname, telnum, email);
 	};
+
+	console.log(loading);
+	console.log(fetchedData);
 
 	return (
 		<LocalForm onSubmit={(values) => handleSubmit(values)}>
@@ -186,14 +190,39 @@ const ContactForm = ({ formSubmit }) => {
 					</Button>
 				</Col>
 			</Row>
+			<Row className="form-group">
+				<Col md={{ size: 10, offset: 2 }}>
+					<Button type="button" color="primary" onClick={fetchData}>
+						Fetch Data
+					</Button>
+				</Col>
+			</Row>
+
+			{loading ? (
+				<Loading />
+			) : (
+				<Row className="form-group">
+					<Col md={{ size: 10, offset: 2 }}>
+						<Label>{fetchedData}</Label>
+					</Col>
+				</Row>
+			)}
 		</LocalForm>
 	);
 };
+
+const mapStateToProps = (state) => ({
+	loading: state.app.loading,
+	fetchedData: state.thunk.data,
+});
 
 const mapDispatchToProps = (dispatch) => ({
 	// componentFunctionName: (props) => dispatch((actionCreator(props)))
 	formSubmit: (firstname, lastname, telnum, email) =>
 		dispatch(formSubmit(firstname, lastname, telnum, email)),
+	fetchData: () => {
+		dispatch(fetchData());
+	},
 });
 
-export default connect(null, mapDispatchToProps)(ContactForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

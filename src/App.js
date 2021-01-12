@@ -1,5 +1,5 @@
 import React from "react";
-import { Provider } from "react-redux";
+import { connect, Provider } from "react-redux";
 import { StoreConfigs } from "./redux/StoreConfigs";
 import ContactForm from "./components/ContactForm";
 import TabNav from "./components/TabNav";
