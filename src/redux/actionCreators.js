@@ -1,4 +1,5 @@
 import * as TYPE from "./actionsTypes";
+import { baseURL } from "../components/baseULR";
 
 export const formSubmit = (firstname, lastname, telnum, email) => ({
 	type: TYPE.SUBMIT_FORM,
@@ -15,14 +16,9 @@ export const formSubmit = (firstname, lastname, telnum, email) => ({
 export const fetchData = () => (dispatch) => {
 	dispatch(fetchDataLoading(true));
 
-	setTimeout(() => {
-		dispatch(
-			addFetchData({
-				data: "hello redux-thunk",
-			})
-		);
-		dispatch(fetchDataLoading(false));
-	}, 2000);
+	return fetch(baseURL + "dishes")
+		.then((response) => response.json())
+		.then((dishes) => dispatch(addFetchData(dishes)));
 };
 
 // action creator -> returns a action of type fetch_loading
